@@ -1,4 +1,4 @@
-package com.finracy.authentication;
+package com.finracy.authentication.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

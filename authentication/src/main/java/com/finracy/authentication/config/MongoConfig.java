@@ -7,14 +7,19 @@ import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.core.MongoClientFactoryBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Collections;
 
 @Configuration
-public class MongoConfig {
-    @Value("${spring.data.mongodb.host}")
+public class MongoConfig extends AbstractMongoClientConfiguration {
+    @Override
+    protected String getDatabaseName() {
+        return "users_db";
+    }
+    /*@Value("${spring.data.mongodb.host}")
     private String host;
 
     @Value("${spring.data.mongodb.port}")
@@ -26,9 +31,6 @@ public class MongoConfig {
     @Value("${spring.data.mongodb.password}")
     private String password;
 
-    @Value("${spring.data.mongodb.authentication-database}")
-    private String authenticationDatabase;
-
     @Value("${spring.data.mongodb.database}")
     private String targetDatabase;
 
@@ -39,7 +41,7 @@ public class MongoConfig {
         mongo.setPort(port);
 
         mongo.setCredential(new MongoCredential[]{
-                MongoCredential.createCredential(username, authenticationDatabase, password.toCharArray())
+                MongoCredential.createCredential(username, targetDatabase, password.toCharArray())
         });
 
         return mongo;
@@ -50,10 +52,10 @@ public class MongoConfig {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyToClusterSettings(
                         builder -> builder.hosts(Collections.singletonList(new ServerAddress(host, port))))
-                .credential(MongoCredential.createCredential(username, authenticationDatabase,
+                .credential(MongoCredential.createCredential(username, targetDatabase,
                         password.toCharArray()))
                 .build();
 
         return new MongoTemplate(MongoClients.create(settings), targetDatabase);
-    }
+    }*/
 }

@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.security.crypto.password.PasswordEncoder;
+/*import org.springframework.security.crypto.password.PasswordEncoder;*/
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -36,7 +36,7 @@ public class AuthenticationService {
     private final EmailSenderService emailSenderService;
     private final UserService userService;
     private final UnverifiedUserService unverifiedUserService;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
     private final MongoOperations mongoOps;
     public void register(RegisterRequest request) {
@@ -59,7 +59,7 @@ public class AuthenticationService {
 
         UnverifiedUser unverifiedUser = UnverifiedUser.builder()
                 .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
+                //.password(passwordEncoder.encode(request.password()))
                 .createdAt(Instant.now())
                 .verificationCode(verificationCode)
                 .build();
@@ -75,14 +75,14 @@ public class AuthenticationService {
 
     public User authenticate(RegisterRequest request) {
         User user = userService.findByEmail(request.email());
-        if(!passwordEncoder.matches(request.password(), user.getPassword())) {
+       /* if(!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw InvalidPasswordException.builder()
                     .msg("Invalid password")
                     .errorCode(ErrorCode.INVALID_PASSWORD)
                     .objectCausedException(request.email())
                     .instant(Instant.now())
                     .build();
-        }
+        }*/
 
         return user;
     }
