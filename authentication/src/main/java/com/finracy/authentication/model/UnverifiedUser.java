@@ -13,7 +13,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "unverified_users")
+@Document
 public class UnverifiedUser {
     @Id
     private String id;

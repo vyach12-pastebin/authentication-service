@@ -14,22 +14,19 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import java.util.Collections;
 
 @Configuration
-public class MongoConfig extends AbstractMongoClientConfiguration {
-    @Override
-    protected String getDatabaseName() {
-        return "users_db";
-    }
-    /*@Value("${spring.data.mongodb.host}")
+public class MongoConfig {
+
+    @Value("${spring.data.mongodb.host}")
     private String host;
 
     @Value("${spring.data.mongodb.port}")
     private Integer port;
-
+/*
     @Value("${spring.data.mongodb.username}")
     private String username;
 
     @Value("${spring.data.mongodb.password}")
-    private String password;
+    private String password;*/
 
     @Value("${spring.data.mongodb.database}")
     private String targetDatabase;
@@ -39,11 +36,6 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         MongoClientFactoryBean mongo = new MongoClientFactoryBean();
         mongo.setHost(host);
         mongo.setPort(port);
-
-        mongo.setCredential(new MongoCredential[]{
-                MongoCredential.createCredential(username, targetDatabase, password.toCharArray())
-        });
-
         return mongo;
     }
 
@@ -52,10 +44,8 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyToClusterSettings(
                         builder -> builder.hosts(Collections.singletonList(new ServerAddress(host, port))))
-                .credential(MongoCredential.createCredential(username, targetDatabase,
-                        password.toCharArray()))
                 .build();
 
         return new MongoTemplate(MongoClients.create(settings), targetDatabase);
-    }*/
+    }
 }

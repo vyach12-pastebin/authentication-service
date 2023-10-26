@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.finracy</groupId>
 	<artifactId>authentication</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>authentication</name>
 	<description>microservice for authentication</description>
 	<properties>
