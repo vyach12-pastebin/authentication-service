@@ -32,7 +32,7 @@ public class AuthenticationController {
                 .accessToken(jwtService.generateAccessToken(user)).build();
     }
 
-    @PostMapping("/confirm")
+    @GetMapping("/confirm")
     public void confirmUrl(@RequestParam("email") String email, @RequestParam("code") String code) {
         log.info("email: {}",email);
         log.info("code: {}",code);
