@@ -6,6 +6,7 @@ import com.finracy.authentication.dto.RegisterRequest;
 import com.finracy.authentication.model.User;
 import com.finracy.authentication.service.AuthenticationService;
 import com.finracy.authentication.service.JwtService;
+import com.finracy.authentication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    private final UserService userService;
     private final JwtService jwtService;
 
     @PostMapping("/register")
@@ -38,5 +40,10 @@ public class AuthenticationController {
         log.info("code: {}",code);
 
         authenticationService.confirmURL(email, code);
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable String id){
+        return userService.findById(id);
     }
 }
