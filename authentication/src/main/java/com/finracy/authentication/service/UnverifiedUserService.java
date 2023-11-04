@@ -28,8 +28,8 @@ public class UnverifiedUserService {
                         .build());
     }
 
-    public void save(UnverifiedUser unverifiedUser) {
-        unverifiedUserRepository.save(unverifiedUser);
+    public UnverifiedUser save(UnverifiedUser unverifiedUser) {
+        return unverifiedUserRepository.save(unverifiedUser);
     }
 
     public void delete(UnverifiedUser unverifiedUser) {

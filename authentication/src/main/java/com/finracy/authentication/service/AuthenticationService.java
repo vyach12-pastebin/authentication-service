@@ -37,8 +37,8 @@ public class AuthenticationService {
     private final UserService userService;
     private final UnverifiedUserService unverifiedUserService;
     private final PasswordEncoder passwordEncoder;
-    private final RedisTemplate<String, String> redisTemplate;
     private final MongoOperations mongoOps;
+
     public void register(RegisterRequest request) {
         if(userService.existsByEmail(request.email()) || unverifiedUserService.existsByEmail(request.email())) {
             throw UserAlreadyExistsException.builder()
@@ -97,6 +97,7 @@ public class AuthenticationService {
                     .objectCausedException(code)
                     .build();
         }
+
         User user = User.builder()
                 .email(unverifiedUser.getEmail())
                 .password(unverifiedUser.getPassword())

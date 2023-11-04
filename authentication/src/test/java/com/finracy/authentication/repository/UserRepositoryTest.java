@@ -3,6 +3,8 @@ package com.finracy.authentication.repository;
 import com.finracy.authentication.AuthenticationApplication;
 import com.finracy.authentication.model.User;
 import static org.assertj.core.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
@@ -21,9 +23,15 @@ class UserRepositoryTest {
     @Autowired
     UserRepository userRepository;
 
+    User user;
+
+    @BeforeEach
+    void init() {
+        user = createUser();
+    }
+
     @Test
     void UserRepository_findUserById_returnSavedUser() {
-        User user = createUser();
         userRepository.save(user);
 
         Optional<User> userInDB = userRepository.findUserById(user.getId());
@@ -34,7 +42,6 @@ class UserRepositoryTest {
 
     @Test
     void UserRepository_findUserByEmail_returnSavedUser() {
-        User user = createUser();
         userRepository.save(user);
 
         Optional<User> userInDB = userRepository.findUserByEmail(user.getEmail());
@@ -45,7 +52,6 @@ class UserRepositoryTest {
 
     @Test
     void UserRepository_existsUserByEmail_returnTrueIfUserExists() {
-        User user = createUser();
         userRepository.save(user);
 
         boolean present = userRepository.existsUserByEmail(user.getEmail());

@@ -1,6 +1,7 @@
 package com.finracy.authentication.service;
 
 import com.finracy.authentication.dto.exception.ErrorCode;
+import com.finracy.authentication.dto.exception.UserAlreadyExistsException;
 import com.finracy.authentication.dto.exception.UserNotFoundException;
 import com.finracy.authentication.model.User;
 import com.finracy.authentication.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserService {
         return userRepository.existsUserByEmail(email);
     }
 
-    public void save(User user) {
-        userRepository.save(user);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 }
