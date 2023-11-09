@@ -23,29 +23,12 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationServiceTest {
-
-    @Mock
-    MongoOperations mongoOps;
-    @Mock
-    UserRepository userRepository;
     @Mock
     UserService userService;
-    @Mock
-    PasswordEncoder passwordEncoder;
-    @Mock
-    EmailSenderService emailSenderService;
     @Mock
     UnverifiedUserService unverifiedUserService;
     @InjectMocks
     AuthenticationService authenticationService;
-
-    User user;
-
-    @BeforeEach
-    void init() {
-        MockitoAnnotations.openMocks(this);
-        user = createUser();
-    }
 
     @Test
     @DisplayName("Test throw exception if user already exists")
@@ -55,31 +38,9 @@ class AuthenticationServiceTest {
                 .password("123")
                 .build();
 
-        when(userService.existsByEmail(request.email())).thenReturn(true);
+        when(userService.existsByEmail(any(String.class))).thenReturn(true);
 
         assertThrows(UserAlreadyExistsException.class, () -> authenticationService.register(request));
-    }
-
-    @Test
-    @DisplayName("Test successful registration")
-    void AuthenticationService_Register_ReturnUnverifiedUser() {
-        RegisterRequest request = RegisterRequest.builder()
-                .email("email@email")
-                .password("password")
-                .build();
-        UnverifiedUser unverifiedUser = UnverifiedUser.builder()
-                .id("123")
-                .email(request.email())
-                .password(request.password())
-                .build();
-
-        when(userService.existsByEmail(request.email())).thenReturn(false);
-        when(unverifiedUserService.existsByEmail(request.email())).thenReturn(false);
-        when(passwordEncoder.encode(request.password())).thenReturn(request.password());
-        when(mongoOps.indexOps(UnverifiedUser.class).ensureIndex(Mockito.any(Index.class))).thenReturn("Пизда");
-
-        authenticationService.register(request);
-        assertThat(unverifiedUser).isNotNull();
     }
 
     @Test

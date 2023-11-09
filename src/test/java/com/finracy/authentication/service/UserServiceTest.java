@@ -46,7 +46,7 @@ class UserServiceTest {
     void UserService_FindByEmail_ReturnUser() {
         when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
-        User savedUser = userService.findById(user.getEmail());
+        User savedUser = userService.findByEmail(user.getEmail());
 
         assertThat(savedUser).isNotNull();
     }
