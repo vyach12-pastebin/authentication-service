@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: authentication-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/authentication_db
+    username: pastbin_user
+    password: pastbin_password
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:/db/changelog.xml
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: vvaa3174@gmail.com
+    password: kvjcotnzlaymhwml
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+jwt:
+  access-token-expire-time-ms: 3600
+  refresh-token-expire-time-ms: 2592000
+  refresh-token-name: refresh-token
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
+
+server:
+  port: 8082
+  error:
+    whitelabel:
+      enabled: false
