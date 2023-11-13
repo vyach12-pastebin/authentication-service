@@ -1,9 +1,9 @@
 FROM openjdk:17-jdk-alpine
-WORKDIR /pastbin/authentication-service
-COPY target/pastbin-authentication-service.jar pastbin-authentication-service.jar
+WORKDIR /pastebin/authentication-service
+COPY target/pastebin-authentication-service.jar pastebin-authentication-service.jar
 
 RUN pwd
 RUN ls
 
 EXPOSE 8082
-ENTRYPOINT ["java", "-jar", "./pastbin-authentication-service.jar"]
+ENTRYPOINT ["java", "-jar", "./pastebin-authentication-service.jar"]
