@@ -3,8 +3,8 @@ spring:
     name: authentication-service
   datasource:
     url: jdbc:postgresql://postgres:5432/authentication_db
-    username: pastbin_user
-    password: pastbin_password
+    username: pastebin_user
+    password: pastebin_password
   jpa:
     properties:
       hibernate:

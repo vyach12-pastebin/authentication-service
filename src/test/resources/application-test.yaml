@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:tc:postgresql://127.0.0.1:5432/test_authentication_db
-    username: test_pastbin_user
-    password: test_pastbin_password
+    username: test_pastebin_user
+    password: test_pastebin_password
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   jpa:
     properties:
