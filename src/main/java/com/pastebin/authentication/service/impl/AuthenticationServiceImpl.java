@@ -1,5 +1,7 @@
 package com.pastebin.authentication.service.impl;
 
+import com.pastebin.authentication.amqp.RegisterNotificationProducer;
+import com.pastebin.authentication.dto.RegisterNotificationDTO;
 import com.pastebin.authentication.dto.RegisterRequest;
 import com.pastebin.authentication.dto.exception.ErrorCode;
 import com.pastebin.authentication.dto.exception.IncorrectVerificationCode;
@@ -8,11 +10,11 @@ import com.pastebin.authentication.dto.exception.UserAlreadyExistsException;
 import com.pastebin.authentication.model.UnverifiedUser;
 import com.pastebin.authentication.model.User;
 import com.pastebin.authentication.service.AuthenticationService;
-import com.pastebin.authentication.service.EmailSenderService;
 import com.pastebin.authentication.service.UnverifiedUserService;
 import com.pastebin.authentication.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +26,16 @@ import java.util.UUID;
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+    @Value("${spring.rabbitmq.exchanges.register-notification}")
+    private String internalExchange;
 
-    private final EmailSenderService emailSenderService;
+    @Value("${spring.rabbitmq.routing-keys.register-notification}")
+    private String internalRegisterNotificationRoutingKey;
+
     private final UserService userService;
     private final UnverifiedUserService unverifiedUserService;
     private final PasswordEncoder passwordEncoder;
+    private final RegisterNotificationProducer notificationProducer;
 
     @Override
     public void register(RegisterRequest request) {
@@ -44,10 +51,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String verificationCode = UUID.randomUUID().toString();
         String confirmationURL = "http://localhost:8080/api/v1/auth/confirm?code=" + verificationCode + "&email=" + request.email();
         String emailBody = "Для подтверждения аккаунта перейдите по ссылке: " + confirmationURL;
-        emailSenderService.sendEmail(request.email(), "Your finracy.com verification code", emailBody);
-        log.info("email: {}",request.email());
-        log.info("code: {}",verificationCode);
 
+        RegisterNotificationDTO notificationDTO = RegisterNotificationDTO.builder()
+                .to(request.email())
+                .subject("Your finracy.com verification code")
+                .body(emailBody)
+                .build();
+
+        notificationProducer.publishEmail(notificationDTO, internalExchange, internalRegisterNotificationRoutingKey);
 
         UnverifiedUser unverifiedUser = UnverifiedUser.builder()
                 .email(request.email())
@@ -55,7 +66,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .createdAt(Instant.now())
                 .verificationCode(verificationCode)
                 .build();
-
 
         unverifiedUserService.save(unverifiedUser);
     }

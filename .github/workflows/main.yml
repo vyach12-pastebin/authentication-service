@@ -41,5 +41,5 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Build Docker image
-        run: docker build . -t pastbin-authentication-service
+        run: docker build . -t pastebin-authentication-service
 

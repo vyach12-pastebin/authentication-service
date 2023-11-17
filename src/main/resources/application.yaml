@@ -1,6 +1,6 @@
 spring:
   application:
-    name: authentication-service
+    name: pastebin-authentication-service
   datasource:
     url: jdbc:postgresql://postgres:5432/authentication_db
     username: pastebin_user
@@ -20,19 +20,21 @@ spring:
     resources:
       add-mappings: false
 
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: pastebin_user
+    password: pastebin_password
+    queues:
+      verification-code: verification-code.queue
+      register-notification: register-notification.queue
+    exchanges:
+      verification-code: verification-code.internal.queue
+      register-notification: register-notification.internal.queue
+    routing-keys:
+      verification-code: verification-code.internal.routing-key
+      register-notification: register-notification.internal.routing-key
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: vvaa3174@gmail.com
-    password: kvjcotnzlaymhwml
-    protocol: smtp
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
 jwt:
   access-token-expire-time-ms: 3600
   refresh-token-expire-time-ms: 2592000
